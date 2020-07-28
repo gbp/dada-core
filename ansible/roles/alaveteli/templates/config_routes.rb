@@ -365,7 +365,7 @@ Rails.application.routes.draw do
   ####
 
   #### Help controller
-  match '/aide/insatisfait/:url_title' => 'help#unhappy',
+  match '/aide/insatisfait(/:url_title)' => 'help#unhappy',
         :as => :help_unhappy,
         :via => :get
   # FIXME: this will break when we upgrade alaveteli, due to
@@ -402,9 +402,10 @@ Rails.application.routes.draw do
   match '/aide/modeles' => 'help#templates',
         :as => :help_templates,
         :via => :get
-  match '/aide/:action' => 'help#action',
+  match '/aide/:template' => 'help#action',
         :as => :help_general,
-        :via => :get
+        :via => :get,
+        :template => /[-_a-z]+/
   match '/aide' => 'help#index',
         :as => :help,
         :via => :get
@@ -696,7 +697,7 @@ Rails.application.routes.draw do
       end
       resources :embargoes, :only => [:destroy, :create] do
         collection do
-          post :destroy_batch, :only => [:destroy]
+          post :destroy_batch
         end
       end
       resources :embargo_extensions, :only => [:create] do
